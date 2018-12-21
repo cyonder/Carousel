@@ -13,6 +13,10 @@
 
   var carouselContainer = document.querySelector(".carousel-container");
 
+  var carouselBody = document.createElement("div");
+  carouselBody.classList.add("carousel-body");
+  carouselContainer.appendChild(carouselBody);
+
   // Create carousel item as many as the amount of items
   for(var i = 0; i < carousel.items.length; i++){
     var carouselItem = document.createElement("div");
@@ -26,11 +30,18 @@
     carouselItem.classList.add("carousel-item");
     carouselItemInner.classList.add("carousel-item-inner");
     carouselImage.classList.add("carousel-image");
-  
+
+    // In first run add active class
+    if(i === 0){
+      carouselItem.classList.add("active");
+    }
+
+    carouselItem.setAttribute("data-item-id", currentItem.id);
+
     carouselImage.appendChild(image);
     carouselItemInner.appendChild(carouselImage);
     carouselItem.appendChild(carouselItemInner);
-    carouselContainer.appendChild(carouselItem);
+    carouselBody.appendChild(carouselItem);
   }
   
   var prevPageBtn = carouselContainer.querySelector(".carousel-control-prev");  
@@ -39,21 +50,30 @@
   var nextPageBtn = carouselContainer.querySelector(".carousel-control-next");
   nextPageBtn.addEventListener("mousedown", nextPage);
 
-  function prevPage(){    
+  function prevPage(){        
     if(carousel.currentPage === 0){
       return false;
-    }else{
-      carousel.currentPage--;
+    }else{      
+      var prevPage = --carousel.currentPage;   
+      setPage(prevPage);
     }
-    console.log("currentPage",carousel.currentPage);
   }
 
-  function nextPage(){    
+  function nextPage(){
     if(carousel.currentPage === carousel.items.length - 1){
       return false;
     }else{
-      carousel.currentPage++;
+      var nextPage = ++carousel.currentPage;
+      setPage(nextPage);
     }
-    console.log("currentPage",carousel.currentPage);
+  }
+
+  function setPage(currentPage){    
+    var arrayOfAllCarouselItems = carouselContainer.querySelectorAll(".carousel-item");
+    
+    currentItem = carouselContainer.querySelector(".active");
+    currentItem.classList.remove("active");
+
+    arrayOfAllCarouselItems[currentPage].classList.add("active");
   }
 }());
